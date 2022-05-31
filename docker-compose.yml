@@ -1,0 +1,10 @@
+version: "3"
+services:
+  tibco:
+    build:
+      context: .
+      dockerfile: docker/java/Dockerfile
+    network_mode: host
+    volumes:
+      - ./tibco:/tibco
+      - ./data:/data
