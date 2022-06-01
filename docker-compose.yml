@@ -8,3 +8,5 @@ services:
     volumes:
       - ./tibco:/tibco
       - ./data:/data
+    env_file:
+      - .env

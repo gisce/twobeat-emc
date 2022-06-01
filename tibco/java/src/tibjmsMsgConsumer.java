@@ -1,11 +1,11 @@
-/* 
- * Copyright (c) 2002-2013 TIBCO Software Inc. 
+/*
+ * Copyright (c) 2002-2013 TIBCO Software Inc.
  * All rights reserved.
  * For more information, please contact:
  * TIBCO Software Inc., Palo Alto, California, USA
- * 
+ *
  * $Id: tibjmsMsgConsumer.java 66719 2013-04-12 20:30:15Z $
- * 
+ *
  */
 
 /*
@@ -40,6 +40,9 @@
  *
  *
  */
+
+import java.text.SimpleDateFormat;
+import java.text.Normalizer;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -50,38 +53,45 @@ import javax.jms.*;
 import com.tibco.tibjms.Tibjms;
 
 
-public class tibjmsMsgConsumer implements ExceptionListener
-{
+public class tibjmsMsgConsumer implements ExceptionListener {
     /*-----------------------------------------------------------------------
      * Parameters
      *----------------------------------------------------------------------*/
 
-     String           serverUrl   = "localhost:7422";
-     String           userName    = null;
-     String           password    = null;
-     String           name        = null;
-     boolean          useTopic    = false;
-     int              ackMode     = Session.AUTO_ACKNOWLEDGE;
+    String serverUrl = null;
+    String userName = null;
+    String password = null;
+    String name = null;
+    boolean useTopic = false;
+    int ackMode = Session.AUTO_ACKNOWLEDGE;
 
-     /*-----------------------------------------------------------------------
-      * Variables
-      *----------------------------------------------------------------------*/
-      Connection      connection  = null;
-      Session         session     = null;
-      MessageConsumer msgConsumer = null;
-      Destination     destination = null;
+    /*-----------------------------------------------------------------------
+     * Variables
+     *----------------------------------------------------------------------*/
+    Connection connection = null;
+    Session session = null;
+    MessageConsumer msgConsumer = null;
+    Destination destination = null;
+    private static final int MAX_SLUG_LENGTH = 500;
 
-    public tibjmsMsgConsumer(String[] args)
-    {
+    public static String slugify(final String s) {
+        final String intermediateResult = Normalizer
+                .normalize(s, Normalizer.Form.NFD)
+                .replaceAll("[^\\p{ASCII}]", "")
+                .replaceAll("[^-_a-zA-Z0-9]", "-").replaceAll("\\s+", "-")
+                .replaceAll("[-]+", "-").replaceAll("^-", "")
+                .replaceAll("-$", "").toLowerCase();
+        return intermediateResult.substring(0,
+                Math.min(MAX_SLUG_LENGTH, intermediateResult.length()));
+    }
+
+    public tibjmsMsgConsumer(String[] args) {
         parseArgs(args);
 
-        try
-        {
-            tibjmsUtilities.initSSLParams(serverUrl,args);
-        }
-        catch (JMSSecurityException e)
-        {
-            System.err.println("JMSSecurityException: "+e.getMessage()+", provider="+e.getErrorCode());
+        try {
+            tibjmsUtilities.initSSLParams(serverUrl, args);
+        } catch (JMSSecurityException e) {
+            System.err.println("JMSSecurityException: " + e.getMessage() + ", provider=" + e.getErrorCode());
             e.printStackTrace();
             System.exit(0);
         }
@@ -90,17 +100,14 @@ public class tibjmsMsgConsumer implements ExceptionListener
         System.err.println("\n------------------------------------------------------------------------");
         System.err.println("tibjmsMsgConsumer SAMPLE");
         System.err.println("------------------------------------------------------------------------");
-        System.err.println("Server....................... "+((serverUrl != null)?serverUrl:"localhost"));
-        System.err.println("User......................... "+((userName != null)?userName:"(null)"));
-        System.err.println("Destination.................. "+name);
+        System.err.println("Server....................... " + ((serverUrl != null) ? serverUrl : "localhost"));
+        System.err.println("User......................... " + ((userName != null) ? userName : "(null)"));
+        System.err.println("Destination.................. " + name);
         System.err.println("------------------------------------------------------------------------\n");
 
-        try
-        {
+        try {
             run();
-        }
-        catch (JMSException e)
-        {
+        } catch (JMSException e) {
             e.printStackTrace();
         }
     }
@@ -109,8 +116,7 @@ public class tibjmsMsgConsumer implements ExceptionListener
     /*-----------------------------------------------------------------------
      * usage
      *----------------------------------------------------------------------*/
-    void usage()
-    {
+    void usage() {
         System.err.println("\nUsage: tibjmsMsgConsumer [options] [ssl options]");
         System.err.println("");
         System.err.println("   where options are:");
@@ -130,88 +136,58 @@ public class tibjmsMsgConsumer implements ExceptionListener
     /*-----------------------------------------------------------------------
      * parseArgs
      *----------------------------------------------------------------------*/
-    void parseArgs(String[] args)
-    {
-        int i=0;
+    void parseArgs(String[] args) {
+        int i = 0;
 
-        while (i < args.length)
-        {
-            if (args[i].compareTo("-server")==0)
-            {
-                if ((i+1) >= args.length) usage();
-                serverUrl = args[i+1];
+        while (i < args.length) {
+            if (args[i].compareTo("-server") == 0) {
+                if ((i + 1) >= args.length) usage();
+                serverUrl = args[i + 1];
                 i += 2;
-            }
-            else
-            if (args[i].compareTo("-topic")==0)
-            {
-                if ((i+1) >= args.length) usage();
-                name = args[i+1];
+            } else if (args[i].compareTo("-topic") == 0) {
+                if ((i + 1) >= args.length) usage();
+                name = args[i + 1];
                 i += 2;
-            }
-            else
-            if (args[i].compareTo("-queue")==0)
-            {
-                if ((i+1) >= args.length) usage();
-                name = args[i+1];
+            } else if (args[i].compareTo("-queue") == 0) {
+                if ((i + 1) >= args.length) usage();
+                name = args[i + 1];
                 i += 2;
                 useTopic = false;
-            }
-            else
-            if (args[i].compareTo("-user")==0)
-            {
-                if ((i+1) >= args.length) usage();
-                userName = args[i+1];
+            } else if (args[i].compareTo("-user") == 0) {
+                if ((i + 1) >= args.length) usage();
+                userName = args[i + 1];
                 i += 2;
-            }
-            else
-            if (args[i].compareTo("-password")==0)
-            {
-                if ((i+1) >= args.length) usage();
-                password = args[i+1];
+            } else if (args[i].compareTo("-password") == 0) {
+                if ((i + 1) >= args.length) usage();
+                password = args[i + 1];
                 i += 2;
-            }
-            else
-            if (args[i].compareTo("-ackmode")==0)
-            {
-                if ((i+1) >= args.length) usage();
-                if (args[i+1].compareTo("AUTO")==0)
+            } else if (args[i].compareTo("-ackmode") == 0) {
+                if ((i + 1) >= args.length) usage();
+                if (args[i + 1].compareTo("AUTO") == 0)
                     ackMode = Session.AUTO_ACKNOWLEDGE;
-                else if (args[i+1].compareTo("CLIENT")==0)
+                else if (args[i + 1].compareTo("CLIENT") == 0)
                     ackMode = Session.CLIENT_ACKNOWLEDGE;
-                else if (args[i+1].compareTo("DUPS_OK")==0)
+                else if (args[i + 1].compareTo("DUPS_OK") == 0)
                     ackMode = Session.DUPS_OK_ACKNOWLEDGE;
-                else if (args[i+1].compareTo("EXPLICIT_CLIENT")==0)
+                else if (args[i + 1].compareTo("EXPLICIT_CLIENT") == 0)
                     ackMode = Tibjms.EXPLICIT_CLIENT_ACKNOWLEDGE;
-                else if (args[i+1].compareTo("EXPLICIT_CLIENT_DUPS_OK")==0)
+                else if (args[i + 1].compareTo("EXPLICIT_CLIENT_DUPS_OK") == 0)
                     ackMode = Tibjms.EXPLICIT_CLIENT_DUPS_OK_ACKNOWLEDGE;
-                else if (args[i+1].compareTo("NO")==0)
+                else if (args[i + 1].compareTo("NO") == 0)
                     ackMode = Tibjms.NO_ACKNOWLEDGE;
-                else
-                {
-                    System.err.println("Unrecognized -ackmode: "+args[i+1]);
+                else {
+                    System.err.println("Unrecognized -ackmode: " + args[i + 1]);
                     usage();
                 }
                 i += 2;
-            }
-            else
-            if (args[i].compareTo("-help")==0)
-            {
+            } else if (args[i].compareTo("-help") == 0) {
                 usage();
-            }
-            else
-            if (args[i].compareTo("-help-ssl")==0)
-            {
+            } else if (args[i].compareTo("-help-ssl") == 0) {
                 tibjmsUtilities.sslUsage();
-            }
-            else
-            if (args[i].startsWith("-ssl"))
-            {
+            } else if (args[i].startsWith("-ssl")) {
                 i += 2;
-            }
-            else
-            {
-                System.err.println("Unrecognized parameter: "+args[i]);
+            } else {
+                System.err.println("Unrecognized parameter: " + args[i]);
                 usage();
             }
         }
@@ -221,8 +197,7 @@ public class tibjmsMsgConsumer implements ExceptionListener
     /*---------------------------------------------------------------------
      * onException
      *---------------------------------------------------------------------*/
-    public void onException(JMSException e)
-    {
+    public void onException(JMSException e) {
         /* print the connection exception status */
         System.err.println("CONNECTION EXCEPTION: " + e.getMessage());
     }
@@ -230,17 +205,16 @@ public class tibjmsMsgConsumer implements ExceptionListener
     /*-----------------------------------------------------------------------
      * run
      *----------------------------------------------------------------------*/
-    void run() throws JMSException
-    {
-        Message       msg         = null;
-        String        msgType     = "UNKNOWN";
+    void run() throws JMSException {
+        Message msg = null;
+        String msgType = "UNKNOWN";
 
-        System.err.println("Subscribing to destination: "+name+"\n");
+        System.err.println("Subscribing to destination: " + name + "\n");
 
         ConnectionFactory factory = new com.tibco.tibjms.TibjmsConnectionFactory(serverUrl);
 
         /* create the connection */
-        connection = factory.createConnection(userName,password);
+        connection = factory.createConnection(userName, password);
 
         /* create the session */
         session = connection.createSession(ackMode);
@@ -261,21 +235,21 @@ public class tibjmsMsgConsumer implements ExceptionListener
         connection.start();
 
         /* read messages */
-        while (true)
-        {
+        while (true) {
             /* receive the message */
             msg = msgConsumer.receive();
             if (msg == null)
-               break;
+                break;
 
             if (ackMode == Session.CLIENT_ACKNOWLEDGE ||
-                ackMode == Tibjms.EXPLICIT_CLIENT_ACKNOWLEDGE ||
-                ackMode == Tibjms.EXPLICIT_CLIENT_DUPS_OK_ACKNOWLEDGE)
-            {
+                    ackMode == Tibjms.EXPLICIT_CLIENT_ACKNOWLEDGE ||
+                    ackMode == Tibjms.EXPLICIT_CLIENT_DUPS_OK_ACKNOWLEDGE) {
                 msg.acknowledge();
             }
             Integer hashCode = msg.hashCode();
-            String file_name = hashCode.toString() + ".txt";
+            String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new java.util.Date());
+            String slugDestination = tibjmsMsgConsumer.slugify(destination.toString());
+            String file_name = hashCode.toString() + "_" + slugDestination+ "_" + timeStamp +".xml";
             String path = "/data/output/" + file_name;
             String msgBody = msg.getBody(String.class);
             try {
@@ -286,7 +260,8 @@ public class tibjmsMsgConsumer implements ExceptionListener
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            System.err.println("Received message: "+ msgBody);
+            System.err.println("Received message: " + msgBody);
+            break;
         }
 
         /* close the connection */
@@ -296,8 +271,7 @@ public class tibjmsMsgConsumer implements ExceptionListener
     /*-----------------------------------------------------------------------
      * main
      *----------------------------------------------------------------------*/
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         new tibjmsMsgConsumer(args);
     }
 }

@@ -100,4 +100,5 @@ fabric.properties
 !/data/output/.gitkeep
 
 ./tibco/java/bin
-!./tibco/java/bin/.gitkeep
+!./tibco/java/bin/.
+.env
