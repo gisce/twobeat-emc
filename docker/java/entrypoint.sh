@@ -3,8 +3,7 @@
 set -o errexit
 set -o pipefail
 set -o nounset
-javac -d ${TIBEMS_TARGET} ${TIBEMS_SRC}/*.java
-echo "OK"
+mvn clean
+mvn install
 
-java net.gisce.Main
-#java tibjmsMsgConsumer -server ${TIBCO_SERVER_URL} -user ${TIBCO_USER} -password ${TIBCO_PASSWORD} -queue ${TIBCO_QUEUE}
+java -jar target/tibco-1.0-SNAPSHOT.jar

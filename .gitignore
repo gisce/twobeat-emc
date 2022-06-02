@@ -103,3 +103,5 @@ fabric.properties
 ./tibco/java/bin/*
 !./tibco/java/bin/.gitkeep
 .env
+
+/tibco/target
