@@ -9,4 +9,4 @@ services:
       - ./tibco:/tibco
       - ./data:/data
     env_file:
-      - .env
+      - ./tibco/src/main/resources/.env

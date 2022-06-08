@@ -46,14 +46,14 @@ import java.text.SimpleDateFormat;
 import java.text.Normalizer;
 import java.io.FileWriter;
 import java.io.IOException;
-
+import java.util.concurrent.TimeUnit;
 import java.io.File;
 import java.io.PrintWriter;
 import javax.jms.*;
-
 import com.tibco.tibjms.Tibjms;
 
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 public class tibjmsMsgConsumer implements ExceptionListener {
     /*-----------------------------------------------------------------------
      * Parameters
@@ -96,15 +96,10 @@ public class tibjmsMsgConsumer implements ExceptionListener {
             e.printStackTrace();
             System.exit(0);
         }
-
-        /* print parameters */
-        System.err.println("\n------------------------------------------------------------------------");
-        System.err.println("tibjmsMsgConsumer SAMPLE");
-        System.err.println("------------------------------------------------------------------------");
-        System.err.println("Server....................... " + ((serverUrl != null) ? serverUrl : "localhost"));
-        System.err.println("User......................... " + ((userName != null) ? userName : "(null)"));
-        System.err.println("Destination.................. " + name);
-        System.err.println("------------------------------------------------------------------------\n");
+        Logger logger = LogManager.getLogger("Connection");
+        logger.info("Server " + ((serverUrl != null) ? serverUrl : "localhost"));
+        logger.info("User " + ((userName != null) ? userName : "(null)"));
+        logger.info("Destination " + name);
 
         try {
             run();
@@ -209,9 +204,8 @@ public class tibjmsMsgConsumer implements ExceptionListener {
     void run() throws JMSException {
         Message msg = null;
         String msgType = "UNKNOWN";
-
-        System.err.println("Subscribing to destination: " + name + "\n");
-
+        Logger logger = LogManager.getLogger(name);
+        logger.info("Subscribing to destination: " + name + "\n");
         ConnectionFactory factory = new com.tibco.tibjms.TibjmsConnectionFactory(serverUrl);
 
         /* create the connection */
@@ -261,7 +255,7 @@ public class tibjmsMsgConsumer implements ExceptionListener {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            System.err.println("Received message: " + msgBody);
+            logger.info("Received message: " + msgBody);
             break;
         }
 
