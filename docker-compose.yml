@@ -1,6 +1,22 @@
 version: "3"
 services:
-  tibco:
+  vsftpd:
+    volumes:
+      - data:/home/vsftpd
+    ports:
+      - '20:20'
+      - '21:21'
+      - '21100-21110:21100-21110'
+    environment:
+      - FTP_USER=ecasa
+      - FTP_PASS=ecasa
+      - PASV_ADDRESS=127.0.0.1
+      - PASV_MIN_PORT=21100
+      - PASV_MAX_PORT=21110
+    container_name: vsftpd
+    image: fauria/vsftpd
+
+  tibco_base: &tibco_base
     build:
       context: .
       dockerfile: docker/java/Dockerfile
@@ -10,3 +26,29 @@ services:
       - ./data:/data
     env_file:
       - ./tibco/src/main/resources/.env
+
+  tibco_lpo_data:
+    <<: *tibco_base
+    environment:
+      - AMM_QUEUE=AMM.LPOData
+    depends_on:
+      - tibco_base
+
+  tibco_publish_dc_standard:
+    <<: *tibco_base
+    environment:
+      - AMM_QUEUE=AMM.LPOData
+    depends_on:
+      - tibco_base
+  tibco_pro_data:
+    <<: *tibco_base
+    environment:
+      - AMM_QUEUE=AMM.RROData
+    depends_on:
+      - tibco_base
+  tibco_publish_lp_totalizer:
+    <<: *tibco_base
+    environment:
+      - AMM_QUEUE=AMM.PublishLPTotalizer
+    depends_on:
+      - tibco_base
