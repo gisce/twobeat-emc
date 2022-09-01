@@ -13,7 +13,9 @@ COPY ./docker/java/entrypoint.sh /entrypoint
 RUN sed -i 's/\r$//g' /entrypoint
 RUN chmod +x /entrypoint
 
+COPY ./tibco/  tibco/
+WORKDIR /tibco
 
-WORKDIR ./tibco
+RUN mvn clean install
 
 ENTRYPOINT ["/entrypoint"]
