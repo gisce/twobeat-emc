@@ -96,12 +96,9 @@ fabric.properties
 # Android studio 3.1+ serialized cache file
 .idea/caches/build_file_checksums.ser
 
-./data/
-!./data/.gitkeep
-!./data/output/.gitkeep
-
-./tibco/java/bin/*
-!./tibco/java/bin/.gitkeep
-.env
-
+/data
 /tibco/target
+!/data/.gitkeep
+!/data/output/.gitkeep
+
+.env
