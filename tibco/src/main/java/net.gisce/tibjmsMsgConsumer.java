@@ -104,6 +104,7 @@ public class tibjmsMsgConsumer implements ExceptionListener {
         try {
             run();
         } catch (JMSException e) {
+            logger.error(e);
             e.printStackTrace();
         }
     }
@@ -252,10 +253,13 @@ public class tibjmsMsgConsumer implements ExceptionListener {
                 FileWriter myWriter = new FileWriter(path);
                 myWriter.write(msgBody);
                 myWriter.close();
+                logger.info("Message received and saved: " + path);
+                logger.info(msgBody);
             } catch (IOException e) {
-                e.printStackTrace();
+                logger.error("error to save Message " + msgBody);
+                logger.error(e);
             }
-            logger.info("Received message: " + msgBody);
+
             break;
         }
 
