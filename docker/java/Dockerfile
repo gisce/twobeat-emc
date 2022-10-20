@@ -14,6 +14,7 @@ RUN sed -i 's/\r$//g' /entrypoint
 RUN chmod +x /entrypoint
 
 COPY ./tibco/  tibco/
+COPY ./.env  /tibco/src/main/resources/
 WORKDIR /tibco
 
 RUN mvn clean install
