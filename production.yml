@@ -24,6 +24,6 @@ services:
   tibco_publish_lp_totalizer:
     <<: *tibco_base
     environment:
-      - AMM_QUEUE=AMM.PublishLPTotalizer
+      - AMM_QUEUE=${QUEUE_TOTALIZER}
     depends_on:
       - tibco_base
