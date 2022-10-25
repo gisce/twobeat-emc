@@ -259,8 +259,6 @@ public class tibjmsMsgConsumer implements ExceptionListener {
                 logger.error("error to save Message " + msgBody);
                 logger.error(e);
             }
-
-            break;
         }
 
         /* close the connection */
