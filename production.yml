@@ -1,0 +1,29 @@
+version: "3"
+services:
+  vsftpd:
+    ports:
+      - '21:21'
+      - '4559-4564:4559-4564'
+    env_file:
+      - .env
+    volumes:
+      - ./data:/srv/${FTP_USER}
+    image: panubo/vsftpd:latest
+
+  tibco_base: &tibco_base
+    build:
+      context: .
+      dockerfile: docker/java/Dockerfile
+    network_mode: host
+    volumes:
+      - ./tibco:/tibco
+      - ./.env:/tibco/src/main/resources/.env
+      - ./data:/data
+    env_file:
+      - .env
+  tibco_publish_lp_totalizer:
+    <<: *tibco_base
+    environment:
+      - AMM_QUEUE=AMM.PublishLPTotalizer
+    depends_on:
+      - tibco_base
