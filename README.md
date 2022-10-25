@@ -1,5 +1,5 @@
 # twobeat-emc
-Tibco ems connection and download xml file 
+Tibco ems connection and download xml file
 ## system requirements
     - docker-compose > 1.29.2
     - docker  > 20.10.17
@@ -8,7 +8,9 @@ Tibco ems connection and download xml file
 1. cp .env.sample .env
    1. Edit and config env file
    2. doc ftp https://github.com/panubo/docker-vsftpd
-3. Build image  
-    4. `docker-compose  build`
+3. Build image
+   4. `docker-compose  build` or `docker-compose  build´
 5. run containers
-   6. `docker-compose  up -d`
+   6. `docker-compose  up -d` or `docker-compose  up -d´
+
+# Production setup
