@@ -3,12 +3,13 @@ services:
   vsftpd:
     ports:
       - '21:21'
-      - '4559-4564:4559-4564'
+      - '4500-4600:4500-4600'
     env_file:
       - .env
     volumes:
       - ./data:/srv/${FTP_USER}
     image: panubo/vsftpd:latest
+    network_mode: "host"
 
   tibco_base: &tibco_base
     build:
@@ -24,6 +25,6 @@ services:
   tibco_publish_lp_totalizer:
     <<: *tibco_base
     environment:
-      - AMM_QUEUE=${QUEUE_TOTALIZER}
+      - AMM_QUEUE=ECASA.AMM.PublishLPTotalizer
     depends_on:
       - tibco_base

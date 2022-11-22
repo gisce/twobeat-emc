@@ -29,21 +29,9 @@ services:
     depends_on:
       - tibco_base
 
-  tibco_publish_dc_standard:
-    <<: *tibco_base
-    environment:
-      - AMM_QUEUE=AMM.LPOData
-    depends_on:
-      - tibco_base
-  tibco_pro_data:
-    <<: *tibco_base
-    environment:
-      - AMM_QUEUE=AMM.RROData
-    depends_on:
-      - tibco_base
   tibco_publish_lp_totalizer:
     <<: *tibco_base
     environment:
-      - AMM_QUEUE=AMM.PublishLPTotalizer
+      - AMM_QUEUE=ECASA.AMM.PublishLPTotalizer
     depends_on:
       - tibco_base

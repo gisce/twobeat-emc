@@ -9,9 +9,9 @@ if [ -z ${AMM_QUEUE} ];then
 fi
 
 if [ "${APP_ENVIORMENT}" = "prod" ]; then
-  mvn compiler
+  mvn clean install
 else
-  mvn compiler
+  mvn clean install
 fi
 
 cd /tibco/target/classes
