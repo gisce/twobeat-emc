@@ -100,5 +100,5 @@ fabric.properties
 /tibco/target
 !/data/.gitkeep
 !/data/output/.gitkeep
-
+!/data/input/.gitkeep
 .env
