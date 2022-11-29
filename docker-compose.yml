@@ -37,6 +37,7 @@ services:
       - tibco_base
 
   stg:
+    image: input_stg
     build:
       context: .
       dockerfile: docker/python/Dockerfile
