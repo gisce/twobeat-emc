@@ -35,3 +35,10 @@ services:
       - AMM_QUEUE=ECASA.AMM.PublishLPTotalizer
     depends_on:
       - tibco_base
+
+  stg:
+    build:
+      context: .
+      dockerfile: docker/python/Dockerfile
+    volumes:
+      - ./stg:/stg
