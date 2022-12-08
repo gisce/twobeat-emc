@@ -1,6 +1,6 @@
 import logging
 import time
-import twobeatstg
+from twobeatstg.output.messages.meter_reading import GenerateMeterReadingRequestMessage
 
 console_handler = logging.StreamHandler()
 _logger = logging.getLogger("STG")
@@ -14,4 +14,13 @@ def run():
 
 
 if __name__ == '__main__':
+    params = {
+        "message_id": "ECASA111111",
+        "request_id": "11111111111111111111111",
+        "serial_number": "UAAEEDN10100002247",
+        "cups_name": "CUPSECASA000001",
+    }
+    meter_reding = GenerateMeterReadingRequestMessage(**params)
     run()
+
+
