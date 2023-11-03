@@ -32,7 +32,7 @@ services:
   tibco_publish_lp_totalizer:
     <<: *tibco_base
     environment:
-      - AMM_QUEUE=ECASA.AMM.PublishLPTotalizer
+      - AMM_QUEUE=ECASA.AMM.WBCMOData
     depends_on:
       - tibco_base
 
