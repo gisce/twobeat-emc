@@ -248,7 +248,9 @@ public class tibjmsMsgConsumer implements ExceptionListener {
             String file_name = hashCode.toString() + "_" + slugDestination+ "_" + timeStamp +".xml";
             String filePath = path + file_name;
             String msgBody = msg.getBody(String.class);
-            try {
+            System.out.println(msgBody);
+            return;
+/*            try {
                 System.out.println(filePath);
                 FileWriter myWriter = new FileWriter(filePath);
                 myWriter.write(msgBody);
@@ -258,7 +260,7 @@ public class tibjmsMsgConsumer implements ExceptionListener {
             } catch (IOException e) {
                 logger.error("error to save Message " + msgBody);
                 logger.error(e);
-            }
+            }*/
         }
 
         /* close the connection */

@@ -189,7 +189,7 @@ public class tibjmsMsgProducer
                 else
                     msgProducer.send(destination, msg, completionListener);
 
-                System.err.println("Published message: "+data.elementAt(i));
+//                System.err.println("Published message: "+data.elementAt(i));
             }
 
             /* close the connection */
