@@ -37,7 +37,7 @@ public class tibjmsUtilities
     static final String  defaultProtocol = "tibjmsnaming";
 
     static final String  defaultProviderURL =
-                            defaultProtocol + "://localhost:7222";
+                            defaultProtocol + "://localhost:7224";
 
     public static void initJNDI(String providerURL) throws NamingException
     {

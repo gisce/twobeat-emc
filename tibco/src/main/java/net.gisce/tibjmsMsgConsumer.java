@@ -29,7 +29,7 @@ package net.gisce;
  *
  *      -server     Server URL.
  *                  If not specified this sample assumes a
- *                  serverUrl of "tcp://localhost:7222"
+ *                  serverUrl of "tcp://localhost:7224"
  *
  *      -user       User name. Default is null.
  *      -password   User password. Default is null.
@@ -246,19 +246,21 @@ public class tibjmsMsgConsumer implements ExceptionListener {
             String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new java.util.Date());
             String slugDestination = tibjmsMsgConsumer.slugify(destination.toString());
             String file_name = hashCode.toString() + "_" + slugDestination+ "_" + timeStamp +".xml";
-            String path = "/data/output/" + file_name;
+            String filePath = path + file_name;
             String msgBody = msg.getBody(String.class);
-            try {
-                System.out.println(path);
-                FileWriter myWriter = new FileWriter(path);
+            System.out.println(msgBody);
+            return;
+/*            try {
+                System.out.println(filePath);
+                FileWriter myWriter = new FileWriter(filePath);
                 myWriter.write(msgBody);
                 myWriter.close();
-                logger.info("Message received and saved: " + path);
+                logger.info("Message received and saved: " + filePath);
                 logger.info(msgBody);
             } catch (IOException e) {
                 logger.error("error to save Message " + msgBody);
                 logger.error(e);
-            }
+            }*/
         }
 
         /* close the connection */

@@ -1,5 +1,7 @@
 import logging
 import time
+import sys
+sys.path.append('libs/twobeatstg')
 from twobeatstg.output.messages.meter_reading import GenerateMeterReadingRequestMessage
 
 console_handler = logging.StreamHandler()

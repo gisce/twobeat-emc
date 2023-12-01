@@ -1,4 +1,5 @@
-/* 
+package net.gisce;
+/*
  * Copyright (c) 2002-2014 TIBCO Software Inc. 
  * All rights reserved.
  * For more information, please contact:
@@ -36,7 +37,7 @@
  *
  *   -server    <server-url>  Server URL.
  *                            If not specified this sample assumes a
- *                            serverUrl of "tcp://localhost:7222"
+ *                            serverUrl of "tcp://localhost:7224"
  *   -user      <user-name>   User name. Default is null.
  *   -password  <password>    User password. Default is null.
  *   -topic     <topic-name>  Topic name. Default value is "topic.sample"
@@ -47,6 +48,7 @@
 import java.util.*;
 import javax.jms.*;
 
+import net.gisce.tibjmsUtilities;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 public class tibjmsMsgProducer
@@ -187,7 +189,7 @@ public class tibjmsMsgProducer
                 else
                     msgProducer.send(destination, msg, completionListener);
 
-                System.err.println("Published message: "+data.elementAt(i));
+//                System.err.println("Published message: "+data.elementAt(i));
             }
 
             /* close the connection */
